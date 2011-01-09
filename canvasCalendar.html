@@ -54,26 +54,18 @@
 			
 			monthDay = 0;
 			
-			// Determining selected month
-			thisMonth = new Date(selectedMonth + " 1, " + selectedYear);
+			selectedDate = new Date(selectedMonth + " 1, " + selectedYear);
+			var thisMonth = selectedDate.getMonth() + 1;
 			
-			// If this month is January...
-			if (thisMonth.getMonth() - 1 == -1) {
-				prevMonthLastDate = 31;
-				thisMonthLastDate = getLastDayOfMonth(thisMonth.getMonth() + 1);
-			}
-			else {
-				prevMonthLastDate = getLastDayOfMonth(thisMonth.getMonth());
-				thisMonthLastDate = getLastDayOfMonth(thisMonth.getMonth() + 1);
-			}
-
-			thisMonthFirstDay = thisMonth.getDay();
-			thisMonthFirstDate = thisMonth.getDate();
+			prevMonthLastDate = getLastDayOfMonth(thisMonth - 1);
+			thisMonthLastDate = getLastDayOfMonth(thisMonth);
+			thisMonthFirstDay = selectedDate.getDay();
+			thisMonthFirstDate = selectedDate.getDate();
 			
-			if (thisMonth.getMonth() + 1 == 12)
+			if (thisMonth == 12)
 				nextMonthFirstDay = 1;
 			else
-				nextMonthFirstDay = thisMonth.getMonth() + 1;
+				nextMonthFirstDay = thisMonth + 1;
 						
 			dateOffset = thisMonthFirstDay;
 		
@@ -170,6 +162,10 @@
 		}
 		
 		function monthChanged() {
+			init();
+		}
+		
+		function submitClick() {
 			init();
 		}
 
