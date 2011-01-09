@@ -1,12 +1,25 @@
 <html>
   <head>
     <title>HTML5 Canvas Calendar</title>
+  
+  <!--
+	HTML5 Canvas Calendar
+		author: Chuck Callebs
+		e-mail: andycallebs (at) gmail (dot) com
+		site: http://sudoit.org/projects/CanvasCalendar
+		date: 01/08/2010
+		
+		This little project was written to help me learn HTML5 and specifically, the
+		<canvas> functionality. It's by no means complete, but should function pretty well
+		as a proof of concept.
+  -->
+  
   </head>
   <body style="margin:5px auto;text-align:center;">
 
 	<h1 style="font-family:helvetica;">HTML5 Canvas Calendar</h1>
 	<div style="padding-bottom:10px;">
-		<select id="ddlMonth" onchange="monthChanged()">
+		<select id="ddlMonth" onchange="init()">
 			<option>January</option>
 			<option>February</option>
 			<option>March</option>
@@ -21,8 +34,7 @@
 			<option>December</option>
 		</select>
 		
-		<input type="text" value="2011" size="1" id="txtYear" />
-		<input type="submit" id="btnSubmit" value="Choose" onclick="submitClick()" />
+		<input type="text" value="2011" size="1" id="txtYear" onblur="init()" />
 	</div>
 	<section>
 	  <div style="margin:0 auto;">
@@ -133,6 +145,7 @@
 
 			switch (month)
 			{
+				case 0 : // prevents error when checking for previous month in jan
 				case 1 :
 				case 3 :
 				case 5 :
@@ -140,6 +153,7 @@
 				case 8 :
 				case 10:
 				case 12:
+				case 13: // prevents error when checking for next month in december
 					day = 31;
 					break;
 				case 4 :
@@ -160,19 +174,13 @@
 
 			return day;
 		}
-		
-		function monthChanged() {
-			init();
-		}
-		
-		function submitClick() {
-			init();
-		}
 
 	  init();
 	</script>
 
         </section>
-
+	<div style="font-family:helvetica;padding:15px;text-align:center;">
+		This was created by <a href="http://sudoit.org">Chuck Callebs</a>.
+	</div>
   </body>
 </html>
