@@ -1,17 +1,63 @@
 $(document).ready(function() {
-  var $month = $('#month')
-  var $year = $('#year')
-
-  $month.on('change', function() {
-    init();
-  });
-
-  $year.on('change', function() {
-    init();
-  });
-
-  init();
+  CanvasCalendar.initialize();
 });
+
+window.CanvasCalendar = {
+
+  initialize: function() {
+    var $month = $('#month');
+    var $year = $('#year');
+
+    $month.on('change', function() {
+      CanvasCalendar.refreshCalendar();
+    });
+
+    $year.on('change', function() {
+      CanvasCalendar.refreshCalendar();
+    });
+    
+    CanvasCalendar.refreshCalendar();
+  },
+
+  refreshCalendar: function() {
+    var selectedMonth = document.getElementById("month").value;
+    var selectedYear = document.getElementById("year").value;
+    
+    monthDay = 0;
+    
+    selectedDate = new Date(selectedMonth + " 1, " + selectedYear);
+    var thisMonth = selectedDate.getMonth() + 1;
+    
+    prevMonthLastDate = getLastDayOfMonth(thisMonth - 1);
+    thisMonthLastDate = getLastDayOfMonth(thisMonth);
+    thisMonthFirstDay = selectedDate.getDay();
+    thisMonthFirstDate = selectedDate.getDate();
+    
+    if (thisMonth == 12)
+      nextMonthFirstDay = 1;
+    else
+      nextMonthFirstDay = thisMonth + 1;
+          
+    dateOffset = thisMonthFirstDay;
+
+    canvas = document.getElementById("calendar");
+    context = canvas.getContext("2d");
+    context.fillStyle = "#f0f0f0";
+    
+    CanvasCalendar.drawCalendar();
+  },
+
+  drawCalendar: function() {
+    for(j = 0; j < 6; ++j) {
+      drawWeek(j);
+    }
+  },
+
+  settings: {
+    thisMonthColor: '#202020',
+    prevMonthColor: '#909090',
+  }
+};
 
 var canvas;
 var context;
@@ -25,42 +71,11 @@ var monthDay;
 
 var thisMonthColor = "#202020";
 var prevMonthColor = "#909090";
-var nextMonthColor = "#909090";
 
 var dateOffset;
 
-function init() {
-  var selectedMonth = document.getElementById("month").value;
-  var selectedYear = document.getElementById("year").value;
-  
-  monthDay = 0;
-  
-  selectedDate = new Date(selectedMonth + " 1, " + selectedYear);
-  var thisMonth = selectedDate.getMonth() + 1;
-  
-  prevMonthLastDate = getLastDayOfMonth(thisMonth - 1);
-  thisMonthLastDate = getLastDayOfMonth(thisMonth);
-  thisMonthFirstDay = selectedDate.getDay();
-  thisMonthFirstDate = selectedDate.getDate();
-  
-  if (thisMonth == 12)
-    nextMonthFirstDay = 1;
-  else
-    nextMonthFirstDay = thisMonth + 1;
-        
-  dateOffset = thisMonthFirstDay;
+function refreshCalendar() {
 
-  canvas = document.getElementById("calendar");
-  context = canvas.getContext("2d");
-  context.fillStyle = "#f0f0f0";
-  
-  drawCalendar();
-}
-
-function drawCalendar() {
-  for(j=0; j<6; ++j) {
-    drawWeek(j);
-  }
 }
 
 function drawWeek(j) {
@@ -79,26 +94,26 @@ function drawDay(i, j) {
   // First week
   if (j == 0) {
     if (i < thisMonthFirstDay) {
-      drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, prevMonthColor);
+      drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor);
     }
     else if (i == thisMonthFirstDay) {
       monthDay = 1;
-      drawDayNumber(thisMonthFirstDate + (dateOffset - i), thisMonthColor);
+      drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor);
     }
     else {
       ++monthDay;
-      drawDayNumber(monthDay, thisMonthColor);
+      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
     }
   }     
   // Last weeks
   else if (thisMonthLastDate <= monthDay) {
     ++monthDay;
-    drawDayNumber(monthDay - thisMonthLastDate, prevMonthColor);
+    drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor);
   }
   // Other weeks
   else {
     ++monthDay;
-    drawDayNumber(monthDay, thisMonthColor);
+    drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
   }
 }
 
