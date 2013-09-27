@@ -1,0 +1,23 @@
+body {
+  margin: 5px auto;
+  text-align: center;
+}
+
+h1 {
+  font-family: helvetica;
+}
+
+footer {
+  font-family: helvetica;
+  padding: 15px;
+  text-align: center;
+}
+
+.date-selection {
+  padding-bottom: 10px;
+}
+
+#calendar {
+  border: 1px dotted;
+  padding:5px;
+}
